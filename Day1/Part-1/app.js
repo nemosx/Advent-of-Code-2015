@@ -5,7 +5,7 @@ var fs = require('fs');
 
 fs.readFile('input.txt', 'utf-8', function (err, data) {
     if (err) {
-        console.error('Could not read input file');
+        console.error('Could not read input file' + err);
     }
 
     var floorInstruction,
@@ -26,7 +26,5 @@ fs.readFile('input.txt', 'utf-8', function (err, data) {
             console.error('Invalid Floor Instruction: ' + floorInstruction);
         }
     }
-
     console.log(floor);
-
 });

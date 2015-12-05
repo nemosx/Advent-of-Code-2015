@@ -3,10 +3,8 @@
  */
 var fs = require('fs');
 var split = require('split');
-
-
-var totalSurfaceArea = 0,
-    totalRibbon = 0;
+var totalSurfaceArea = 0;
+var totalRibbon = 0;
 
 fs.createReadStream('input.txt', 'utf-8')
     .pipe(split())
@@ -30,7 +28,6 @@ fs.createReadStream('input.txt', 'utf-8')
         var smallestSideArea = Math.min(lw, wh, hl);
 
         totalSurfaceArea += (surfaceArea + smallestSideArea);
-
     })
     .on('end', function () {
         console.log(totalSurfaceArea);

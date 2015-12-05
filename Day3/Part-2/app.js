@@ -17,7 +17,6 @@ var world = {};
 // check if location is already in world
 // if so, deliver present to the house
 // if not, create house w/ location, deliver present, add to world
-
 fs.readFile('input.txt', 'utf-8', function (err, data) {
     if (err) {
         console.error('Error reading file' + err);
@@ -25,7 +24,6 @@ fs.readFile('input.txt', 'utf-8', function (err, data) {
 
     var location = [0, 0],
         roboLocation = [0, 0];
-
     var house = new House(location).deliverPresent();
 
     house.deliverPresent();
@@ -52,6 +50,7 @@ fs.readFile('input.txt', 'utf-8', function (err, data) {
 
     for (; i < length; i++) {
         var someonesLocation;
+
         if (santaTurn) {
             someonesLocation = location;
         } else {

@@ -50,8 +50,6 @@ fs.readFile('input.txt', 'utf-8', function (err, data) {
 
         world[location] = world[location] || new House(location);
         world[location].deliverPresent();
-
-
     }
 
     console.log(Object.keys(world).length);
