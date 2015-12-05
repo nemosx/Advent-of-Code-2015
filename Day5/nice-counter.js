@@ -5,9 +5,12 @@
  * It contains at least one letter that appears twice in a row, like xx, abcdde (dd), or aabbccdd (aa, bb, cc, or dd).
  * It does not contain the strings ab, cd, pq, or xy, even if they are part of one of the other requirements.
  */
-function NiceCounter() {
+function NiceCounter(part) {
     var niceStringCount = 0;
     var consecutiveCharacterExpression = /(\w)\1/;
+    var twoLetterPairExpression = /(\w\w).*\1/;
+    var repeatWithOneCharSeparationExpression = /(\w).\1/;
+    var part = part;
 
     function process(string) {
         if (isNice(string)) {
@@ -17,7 +20,18 @@ function NiceCounter() {
     }
 
     function isNice(string) {
-        return hasConsecutiveLetters(string) && hasAtLeastThreeVowels(string) && hasNoBannedSubstrings(string);
+        if (part === 'One') {
+            return hasConsecutiveLetters(string) && hasAtLeastThreeVowels(string) && hasNoBannedSubstrings(string);
+        }
+        return hasTwoLetterPair(string) && hasRepeatWithOneCharSeparation(string);
+    }
+
+    function hasTwoLetterPair(string) {
+        return twoLetterPairExpression.test(string);
+    }
+
+    function hasRepeatWithOneCharSeparation(string) {
+        return repeatWithOneCharSeparationExpression.test(string);
     }
 
     function hasConsecutiveLetters(string) {

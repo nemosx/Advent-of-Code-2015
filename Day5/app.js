@@ -1,9 +1,11 @@
 /**
- *
+ * Created by Michael Root on 12/5/2015.
  **/
 var fs = require('fs');
 var split = require('split');
-var niceCounter = new require('./nice-counter')();
+var part = process.argv[2] || "One";
+
+var niceCounter = new require('./nice-counter')(part);
 
 fs.createReadStream('input.txt', 'utf-8')
     .pipe(split())
