@@ -10,10 +10,9 @@ fs.readFile('input.txt', 'utf-8', function (err, data) {
 
     var floorInstruction,
         floor = 0,
-        i = 0,
         length = data.length;
 
-    for (; i < length; i++) {
+    for (var i = 0; i < length; i++) {
         floorInstruction = data[i];
 
         if (floorInstruction === '(') {

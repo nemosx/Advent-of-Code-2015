@@ -1,0 +1,8 @@
+{
+  "name": "advent-day-6",
+  "version": "0.0.1",
+  "devDependencies": {
+    "mathjs": "^2.5.0",
+    "split": "^1.0.0"
+  }
+}
