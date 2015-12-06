@@ -32,26 +32,26 @@ function updateLightDisplay(instruction) {
     lightDisplay.subset(subsetIndex, updatedSubsetOfLights);
 }
 
-function turnOn() {
-    return 1;
+function turnOn(value) {
+    return value + 1;
 }
 
-function turnOff() {
-    return 0;
+function turnOff(value) {
+    return Math.max(0, (value - 1));
 }
 
 function toggle(value) {
-    return value ^ 1;
+    return value + 2;
 }
 
 fs.createReadStream('input.txt', 'utf-8')
     .pipe(split())
     .on('data', updateLightDisplay)
     .on('end', function () {
-        var count = 0;
+        var totalBrightness = 0;
         lightDisplay.map(function (value, index, matrix) {
-            value == true ? count++ : count;
+            totalBrightness += value;
             return value;
         });
-        console.log('Number On: ' + count);
+        console.log('Brightness: ' + totalBrightness);
     });
