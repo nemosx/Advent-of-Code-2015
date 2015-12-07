@@ -10,7 +10,6 @@ function NiceCounter(part) {
     var consecutiveCharacterExpression = /(\w)\1/;
     var twoLetterPairExpression = /(\w\w).*\1/;
     var repeatWithOneCharSeparationExpression = /(\w).\1/;
-    var part = part;
 
     function process(string) {
         if (isNice(string)) {
@@ -20,10 +19,10 @@ function NiceCounter(part) {
     }
 
     function isNice(string) {
-        if (part === 'One') {
-            return hasConsecutiveLetters(string) && hasAtLeastThreeVowels(string) && hasNoBannedSubstrings(string);
+        if (part === '2') {
+            return hasTwoLetterPair(string) && hasRepeatWithOneCharSeparation(string);
         }
-        return hasTwoLetterPair(string) && hasRepeatWithOneCharSeparation(string);
+        return hasConsecutiveLetters(string) && hasAtLeastThreeVowels(string) && hasNoBannedSubstrings(string);
     }
 
     function hasTwoLetterPair(string) {
