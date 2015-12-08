@@ -1,63 +1,72 @@
-/**
- * Created by Michael Root on 12/6/2015.
- */
 var fs = require('fs');
 var split = require('split');
-var circuit = require('./circuit').initializeCircuit();
+var circuit = require('./circuit').init();
 
-//TODO Serious Refactoring...
-function getSource(source) {
-    var leftSourceWireId;
-    var right;
-    var gate;
-    var operator;
-    var leftWire;
-    var rightWire;
+function matchesRegex(string, regex, results) {
+    var matches = string.match(regex);
+    results.concat(matches);
+    results.push.apply(results, matches);
+    return matches;
+}
 
-    if (source.match(/^\d+/)) {
-        //source is numeric
-        return Number.parseInt(source);
-    }
-    else if (source.match(/^\w\w$/)) {
-        return circuit.getWire(source);
-    }
-    else if (source.includes('NOT')) {
-        leftSourceWireId = source.match(/^NOT (\w+)/)[1];
-        gate = circuit.createGate('NOT');
-        return gate.connectWire(circuit.getWire(leftSourceWireId));
-    }
-    else {
-        var matches = source.match(/(\w+) (AND|OR|LSHIFT|RSHIFT) (\w+|\d+)/);
-        leftSourceWireId = matches[1];
-        operator = matches[2];
+function createNumericSource(value) {
+    return {
+        getSignal: function () {
+            return Number.parseInt(value);
+        },
+        resetSignal: function () {
 
-        right = matches[3];
-
-        leftWire = circuit.getWire(leftSourceWireId);
-
-        if (right.match(/^\d+/)) {
-            right = Number.parseInt(right);
-            return circuit.createGate(operator, right).connectWire(leftWire);
-        } else {
-            rightWire = circuit.getWire(right);
-            return circuit.createGate(operator).connectWire(leftWire).connectWire(rightWire);
         }
     }
 }
-
-
 fs.createReadStream('input.txt', 'utf-8')
     .pipe(split())
     .on('data', function (line) {
-        var components = line.split(' -> ');
-        var source = components[0];
-        var wireId = components[1];
+        var assignPattern = /^(\w+) -> (\w+)/;
+        var notPattern = /^NOT (\w+) -> (\w+)/;
+        var binaryPattern = /^(\w+) (AND|OR|LSHIFT|RSHIFT) (\w+) -> (\w+)/
+        var results = [];
+        var gate;
 
-        var sourceObject = getSource(source);
-        var wire = circuit.getWire(wireId);
-        wire.setSource(sourceObject);
+        if (matchesRegex(line, assignPattern, results)) {
+            if (!isNaN(results[1])) {
+                circuit.wire(results[2]).setSource(createNumericSource(results[1]));
+            } else {
+                circuit.wire(results[2]).setSource(circuit.wire(results[1]));
+            }
+        }
+        else if (matchesRegex(line, notPattern, results)) {
+            gate = circuit.createGateSource('NOT');
+            gate.attachInput(circuit.wire(results[1]));
+            circuit.wire(results[2]).setSource(gate);
+        }
+        else if (matchesRegex(line, binaryPattern, results)) {
+            var leftOp = results[1];
+            var operator = results[2];
+            var rightOp = results[3];
+            var dest = results[4];
+
+            if (operator === 'LSHIFT' || operator === 'RSHIFT') {
+                gate = circuit.createGateSource(operator, rightOp);
+                gate.attachInput(circuit.wire(leftOp));
+                circuit.wire(dest).setSource(gate);
+                return;
+            } else {
+                if (!isNaN(leftOp)) {
+                    leftOp = createNumericSource(leftOp);
+                } else {
+                    leftOp = circuit.wire(results[1]);
+                }
+                rightOp = circuit.wire(results[3]);
+
+                gate = circuit.createGateSource(operator);
+                gate.attachInput(leftOp);
+                gate.attachInput(rightOp);
+                circuit.wire(dest).setSource(gate);
+            }
+        }
 
     })
     .on('end', function () {
-        circuit.getWire('a').source();
-    })
+        console.log(circuit.wire('a').getSignal());
+    });

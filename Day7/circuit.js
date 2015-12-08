@@ -1,99 +1,68 @@
-/**
- * Created by Michael Root on 12/7/2015.
- */
-var gateFunctions = {
-    'AND': function (wires) {
-        return wires[0].source() & wires[1].source();
-    },
-    'OR': function (wires) {
-        return wires[0].source() | wires[1].source();
-    },
-    'LSHIFT': function (shiftAmount) {
-        return function (wire) {
-            return wire[0].source() << shiftAmount;
-        }
-    },
-    'RSHIFT': function (shiftAmount) {
-        return function (wire) {
-            return wire[0].source() >> shiftAmount;
-        }
-    },
-    'NOT': function (wires) {
-        return (~wires[0].source() & 0xFFFF);
-    }
-};
+module.exports.init = function () {
+    var circuit = {};
 
-
-function createWire(id, source) {
-    var src = source;
-    return {
-        id: id,
-        source: function () {
-            console.log('ID: ' + id);
-            return Number.isInteger(src) ? src : src.source();
+    var ops = {
+        'NOT': function (w) {
+            return ~w[0].getSignal() & 0xFFFF;
         },
-        setSource: function (source) {
-            src = source;
-        }
-    }
-}
-
-function createGateFunction(operator, shiftAmount) {
-    if (shiftAmount) {
-        return gateFunctions[operator](shiftAmount);
-    }
-    return gateFunctions[operator];
-}
-
-function createGate(op) {
-    var wires = [];
-    var gate = {
-        connectWire: function (wire) {
-            wires.push(wire);
-            return gate;
+        'AND': function (sources) {
+            return sources[0].getSignal() & sources[1].getSignal();
         },
-        source: function () {
-            console.log('GATE: ' + wires);
-            return op(wires);
+        'OR': function (sources) {
+            return sources[0].getSignal() | sources[1].getSignal();
+        },
+        'LSHIFT': function (shiftAmount) {
+            return function (source) {
+                return source[0].getSignal() << shiftAmount;
+            };
+        },
+        'RSHIFT': function (shiftAmount) {
+            return function (source) {
+                return source[0].getSignal() >> shiftAmount;
+            };
         }
     };
-    return gate;
-};
 
-module.exports.createWire = createWire;
+    function createWire(id) {
+        var _source = -1;
 
-module.exports.createGate = createGate;
-
-
-module.exports.initializeCircuit = function () {
-    var wireMap = {};
-
-    function getWire(id, source) {
-        wireMap[id] = wireMap[id] || createWire(id, source);
-        return wireMap[id];
-    }
-
-    function addWire(wire) {
-        wireMap[wire.id] = wire;
+        return {
+            id: id,
+            setSource: function (source) {
+                _source = source;
+            },
+            getSignal: function () {
+                return _source.getSignal();
+            }
+        };
     }
 
     return {
-        addWire: addWire,
-        getWire: getWire,
-        updateWireSource: function (id, source) {
-            var wire = getWire(id);
-            wire.setSource(source);
-        },
-        createGate: function (operator, shiftAmount) {
-            var gateOperator = createGateFunction(operator, shiftAmount);
-            return createGate(gateOperator);
+        wire: function (id) {
+            var existingWire = circuit[id] || createWire(id);
+            circuit[id] = existingWire;
+            return existingWire;
         },
         print: function () {
-            Object.keys(wireMap).map(function (key) {
-                var wire = wireMap[key];
-                console.log('ID: ' + wire.id);
-                console.log('Signal:' + wire.source());
-            });
+            Object.keys(circuit).map(function (key) {
+                console.log('ID: ' + id + ' Signal: ' + circuit[id].getSignal());
+            })
+        },
+        createGateSource: function (type, shiftAmount) {
+            var op = shiftAmount ? ops[type](shiftAmount) : ops[type];
+            var inputSources = [];
+            var computedValue;
+
+            return {
+                getSignal: function () {
+                    computedValue = computedValue || op(inputSources);
+                    return computedValue;
+                },
+                attachInput: function (input) {
+                    inputSources.push(input);
+                }
+            }
         }
-    };
+    }
+
 }
