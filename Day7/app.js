@@ -14,7 +14,7 @@ fs.createReadStream('input.txt', 'utf-8')
     .on('data', function (line) {
         var assignPattern = /^(\w+) -> (\w+)/;
         var notPattern = /^NOT (\w+) -> (\w+)/;
-        var binaryPattern = /^(\w+) (AND|OR|LSHIFT|RSHIFT) (\w+) -> (\w+)/
+        var binaryPattern = /^(\w+) (AND|OR|LSHIFT|RSHIFT) (\w+) -> (\w+)/;
         var results = [];
         var gate;
 
@@ -40,18 +40,17 @@ fs.createReadStream('input.txt', 'utf-8')
                 gate = circuit.createGateSource(operator, rightOp);
                 gate.attachInput(circuit.wire(leftOp));
                 circuit.wire(dest).setSource(gate);
-                return;
             } else {
                 if (!isNaN(leftOp)) {
                     leftOp = circuit.createNumericSource(leftOp);
+                    gate = circuit.createGateSource(operator);
+                    gate.attachInput(leftOp);
+                    gate.attachInput(rightOp);
                 } else {
                     leftOp = circuit.wire(results[1]);
                 }
                 rightOp = circuit.wire(results[3]);
 
-                gate = circuit.createGateSource(operator);
-                gate.attachInput(leftOp);
-                gate.attachInput(rightOp);
                 circuit.wire(dest).setSource(gate);
             }
         }
