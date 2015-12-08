@@ -1,0 +1,6 @@
+123 -> hz
+288 -> gj
+hz RSHIFT 1 -> is
+gj RSHIFT 5 -> gm
+gm AND r -> f
+8 -> r
