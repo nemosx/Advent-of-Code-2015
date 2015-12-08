@@ -9,16 +9,6 @@ function matchesRegex(string, regex, results) {
     return matches;
 }
 
-function createNumericSource(value) {
-    return {
-        getSignal: function () {
-            return Number.parseInt(value);
-        },
-        resetSignal: function () {
-
-        }
-    }
-}
 fs.createReadStream('input.txt', 'utf-8')
     .pipe(split())
     .on('data', function (line) {
@@ -30,7 +20,7 @@ fs.createReadStream('input.txt', 'utf-8')
 
         if (matchesRegex(line, assignPattern, results)) {
             if (!isNaN(results[1])) {
-                circuit.wire(results[2]).setSource(createNumericSource(results[1]));
+                circuit.wire(results[2]).setSource(circuit.createNumericSource(results[1]));
             } else {
                 circuit.wire(results[2]).setSource(circuit.wire(results[1]));
             }
@@ -53,7 +43,7 @@ fs.createReadStream('input.txt', 'utf-8')
                 return;
             } else {
                 if (!isNaN(leftOp)) {
-                    leftOp = createNumericSource(leftOp);
+                    leftOp = circuit.createNumericSource(leftOp);
                 } else {
                     leftOp = circuit.wire(results[1]);
                 }
@@ -68,5 +58,11 @@ fs.createReadStream('input.txt', 'utf-8')
 
     })
     .on('end', function () {
+        console.log(circuit.wire('a').getSignal());
+
+        circuit.wire('b').setSource(circuit.createNumericSource(circuit.wire('a').getSignal()));
+
+        circuit.reset();
+
         console.log(circuit.wire('a').getSignal());
     });

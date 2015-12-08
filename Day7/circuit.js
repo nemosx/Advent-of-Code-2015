@@ -33,6 +33,9 @@ module.exports.init = function () {
             },
             getSignal: function () {
                 return _source.getSignal();
+            },
+            resetSignal: function () {
+                _source.resetSignal();
             }
         };
     }
@@ -42,6 +45,11 @@ module.exports.init = function () {
             var existingWire = circuit[id] || createWire(id);
             circuit[id] = existingWire;
             return existingWire;
+        },
+        reset: function () {
+            Object.keys(circuit).map(function (id) {
+                circuit[id].resetSignal();
+            });
         },
         print: function () {
             Object.keys(circuit).map(function (key) {
@@ -54,6 +62,9 @@ module.exports.init = function () {
             var computedValue;
 
             return {
+                resetSignal: function () {
+                    computedValue = undefined;
+                },
                 getSignal: function () {
                     computedValue = computedValue || op(inputSources);
                     return computedValue;
@@ -62,7 +73,16 @@ module.exports.init = function () {
                     inputSources.push(input);
                 }
             }
+        },
+        createNumericSource: function (value) {
+            return {
+                getSignal: function () {
+                    return Number.parseInt(value);
+                },
+                resetSignal: function () {
+
+                }
+            }
         }
     }
-
 }
