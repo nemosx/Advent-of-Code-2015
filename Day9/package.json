@@ -1,0 +1,8 @@
+{
+  "name": "advent-day-9",
+  "version": "0.0.1",
+  "devDependencies": {
+    "permutation-engine": "^0.1.5",
+    "split": "^1.0.0"
+  }
+}
