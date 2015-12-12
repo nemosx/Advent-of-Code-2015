@@ -31,6 +31,7 @@ function hasTwoNonOverlappingPairs(password) {
 function hasNoBannedSubstrings(string) {
     return !(string.includes('i') ||
     string.includes('o') ||
-    string.includes('l'));
+    string.includes('l') ||
+    string.includes('cqjxxyzz'));
 }
 
