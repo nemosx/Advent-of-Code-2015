@@ -1,7 +1,7 @@
 /**
  * Created by Michael Root on 12/10/2015.
  */
-var iterations = 40;
+var iterations = 50;
 var input = '1113222113';
 
 while (iterations--) {
@@ -20,6 +20,8 @@ while (iterations--) {
             tempStorage = [];
             tempStorage.push(currentElement);
         }
+        console.log('iteration: ' + iterations);
+
     }
     if (tempStorage.length > 0) {
         nextSequence += tempStorage.length + tempStorage[0];
