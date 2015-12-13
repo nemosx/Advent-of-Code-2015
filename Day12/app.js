@@ -3,22 +3,33 @@
  */
 var fs = require('fs');
 
-fs.readFile('input.json', 'utf-8', function (err, data) {
-    if (!err) {
-        console.log('Sum: ' + addNumbers(JSON.parse(data)));
-    }
-})
-
 function addNumbers(obj) {
     var sum = 0;
+    var hasRedValue;
     if (typeof obj === 'number') {
         return obj;
     }
     else if (typeof obj === 'string') {
         return 0;
     }
-    Object.keys(obj).map(function (key, value) {
-        sum += addNumbers(obj[key]);
+
+    if (typeof obj === 'object' && !Array.isArray(obj)) {
+        hasRedValue = Object.keys(obj).some(function (key) {
+            return obj[key] === 'red';
+        });
+        if (hasRedValue) {
+            return 0;
+        }
+    }
+
+    Object.keys(obj).forEach(function (value) {
+        sum += addNumbers(obj[value]);
     });
     return sum;
 }
+
+fs.readFile('input.json', 'utf-8', function (err, data) {
+    if (!err) {
+        console.log('Sum: ' + addNumbers(JSON.parse(data)));
+    }
+});
