@@ -13,6 +13,6 @@ House.prototype.getAddress = function () {
 House.prototype.deliverPresent = function () {
     this.presents++;
     return this;
-}
+};
 
 module.exports = House;

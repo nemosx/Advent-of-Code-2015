@@ -59,7 +59,7 @@ fs.readFile('input.txt', 'utf-8', function (err, data) {
 
         updateLocation(data[i], someonesLocation);
 
-        var house = world[someonesLocation] || new House(someonesLocation);
+        house = world[someonesLocation] || new House(someonesLocation);
         world[someonesLocation] = house;
         house.deliverPresent();
 
@@ -68,7 +68,7 @@ fs.readFile('input.txt', 'utf-8', function (err, data) {
 
     console.log(Object.keys(world).length);
 
-})
+});
 
 
 

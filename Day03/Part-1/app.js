@@ -53,8 +53,7 @@ fs.readFile('input.txt', 'utf-8', function (err, data) {
     }
 
     console.log(Object.keys(world).length);
-
-})
+});
 
 
 
