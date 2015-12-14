@@ -15,7 +15,7 @@ var operations = {
 };
 
 function updateLightDisplay(instruction) {
-    var instruction = parser.parseInstruction(instruction);
+    instruction = parser.parseInstruction(instruction);
 
     var rowRangeStart = instruction.startCoordinatePair[0],
         rowRangeEnd = instruction.endCoordinatePair[0],
