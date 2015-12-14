@@ -4,6 +4,15 @@
 module.exports.init = function () {
     var currentFloor = 0;
 
+    var instructionMap = {
+        '(': ascendFloor,
+        ')': descendFloor
+    };
+
+    function processInstruction(instruction) {
+        instructionMap[instruction]();
+    }
+
     function ascendFloor() {
         currentFloor++;
     }
@@ -19,6 +28,7 @@ module.exports.init = function () {
     return {
         ascendFloor: ascendFloor,
         descendFloor: descendFloor,
-        currentFloor: getCurrentFloor
+        currentFloor: getCurrentFloor,
+        processInstruction: processInstruction
     };
 };

@@ -13,13 +13,8 @@ fs.readFile('input.txt', 'utf-8', function (err, data) {
         console.error('Could not read input file' + err);
     }
 
-    var instructionMap = {
-        '(': floorClimber.ascendFloor,
-        ')': floorClimber.descendFloor
-    };
-
-    for (let i = 0, length = data.length; i < length; i++) {
-        instructionMap[data[i]]();
+    for (var i = 0, length = data.length; i < length; i++) {
+        floorClimber.processInstruction(data[i]);
 
         if (isPartTwo && floorClimber.currentFloor() === -1) {
             console.log('Current Floor = ' + floorClimber.currentFloor() + ' : ' + (i + 1));
