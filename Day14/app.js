@@ -41,20 +41,20 @@ function Racer(params) {
 
     this.getName = function () {
         return _data.name;
-    }
-
+    };
 
     this.getPosition = function () {
         return position;
-    }
+    };
 
     this.getPoints = function () {
         return points;
-    }
+    };
 }
 
 function parseLine(input) {
     var matches = input.match(PATTERN);
+
     var racer = new Racer({
         name: matches[1],
         speed: Number.parseInt(matches[2]),
@@ -79,12 +79,13 @@ function getLeader(beatsLeader) {
 }
 
 function simulateRace() {
-
     for (var i = 0; i < NUM_SECONDS; ++i) {
         raceSimulator.emit('secondTick');
+
         var leader = getLeader(function (racer, leader) {
             return racer.getPosition() > leader.getPosition();
         });
+
         raceSimulator.emit('secondEnd', leader.getPosition());
     }
 
