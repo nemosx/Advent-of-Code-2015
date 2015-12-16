@@ -17,6 +17,7 @@ function Racer(params) {
     var flyTime = _data.flyTime;
     var position = 0;
     var coolDown = 0;
+    var points = 0;
 
     this.updatePosition = function () {
         if (flyTime) {
@@ -31,6 +32,13 @@ function Racer(params) {
         }
     };
 
+    this.updatePoints = function (distance) {
+        if (distance === position) {
+            console.log(_data.name + ' in the lead');
+            points++;
+        }
+    };
+
     this.getName = function () {
         return _data.name;
     }
@@ -38,6 +46,10 @@ function Racer(params) {
 
     this.getPosition = function () {
         return position;
+    }
+
+    this.getPoints = function () {
+        return points;
     }
 }
 
@@ -53,22 +65,36 @@ function parseLine(input) {
     racers.push(racer);
 
     raceSimulator.on('secondTick', racer.updatePosition);
+    raceSimulator.on('secondEnd', racer.updatePoints);
+}
+
+function getLeader(beatsLeader) {
+    var leader = racers[0];
+    racers.forEach(function (racer) {
+        if (beatsLeader(racer, leader)) {
+            leader = racer;
+        }
+    });
+    return leader;
 }
 
 function simulateRace() {
 
     for (var i = 0; i < NUM_SECONDS; ++i) {
         raceSimulator.emit('secondTick');
+        var leader = getLeader(function (racer, leader) {
+            return racer.getPosition() > leader.getPosition();
+        });
+        raceSimulator.emit('secondEnd', leader.getPosition());
     }
 
-    var farthestRacer = racers[0];
-    racers.forEach(function (racer) {
-        if (racer.getPosition() > farthestRacer.getPosition()) {
-            farthestRacer = racer;
-        }
+    var winner = getLeader(function (racer, leader) {
+        return racer.getPoints() > leader.getPoints();
     });
 
-    console.log("Winner: " + farthestRacer.getName() + ' Distance: ' + farthestRacer.getPosition());
+    console.log("Winner: " + winner.getName() +
+        ' Distance: ' + winner.getPosition() +
+        'Points: ' + winner.getPoints());
 }
 
 
