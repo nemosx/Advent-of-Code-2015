@@ -9,4 +9,11 @@ describe('Day01', function () {
             assert.equal(result, 138);
         });
     });
+
+    describe('Part 2', function () {
+        it('should return 1771', function () {
+            var result = require('../Day01/app.js').solvePuzzle(true);
+            assert.equal(result, 1771);
+        });
+    });
 });
