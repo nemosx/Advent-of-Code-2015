@@ -1,0 +1,7 @@
+{
+  "name": "advent-day-16",
+  "version": "0.0.1",
+  "devDependencies": {
+    "split": "^1.0.0"
+  }
+}
