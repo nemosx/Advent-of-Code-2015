@@ -8,10 +8,8 @@ var fs = require('fs');
 var floorClimber = require('./floor-climber').init();
 var isPartTwo = process.argv[3] === '2';
 
-fs.readFile('input.txt', 'utf-8', function (err, data) {
-    if (err) {
-        console.error('Could not read input file' + err);
-    }
+module.exports.solvePuzzle = function () {
+    var data = fs.readFileSync(__dirname + '/input.txt', 'utf-8');
 
     for (var i = 0, length = data.length; i < length; i++) {
         floorClimber.processInstruction(data[i]);
@@ -21,5 +19,5 @@ fs.readFile('input.txt', 'utf-8', function (err, data) {
             break;
         }
     }
-    console.log(floorClimber.currentFloor());
-});
+    return floorClimber.currentFloor();
+};

@@ -9,7 +9,6 @@ var totalRibbon = 0;
 fs.createReadStream('input.txt', 'utf-8')
     .pipe(split())
     .on('data', function (measurement) {
-
         var measurementComponents = measurement.split('x').sort(function (a, b) {
             return a - b;
         });
