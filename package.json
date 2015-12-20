@@ -1,0 +1,25 @@
+{
+  "name": "adventofcode",
+  "version": "1.0.0",
+  "description": "My solutions to Advent of Code 2015 puzzles.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nemosx/adventofcode.git"
+  },
+  "keywords": [
+    "adventofcode"
+  ],
+  "author": "Michael Root",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nemosx/adventofcode/issues"
+  },
+  "homepage": "https://github.com/nemosx/adventofcode#readme",
+  "devDependencies": {
+    "mocha": "^2.3.4"
+  }
+}
