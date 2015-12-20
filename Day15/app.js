@@ -25,10 +25,8 @@ function findOptimalRecipe() {
 
     var maxScore = 0;
     var bestRecipe;
-
     var recipe;
     var quantities;
-
 
     for (var i = 0; i < 101; ++i) {
         for (var j = 0; j < 101; ++j) {
@@ -70,10 +68,20 @@ function evaluateRecipe(recipe) {
         scores.push(Math.max(0, propertyScore));
     });
 
+    var calorieCount = 0;
+
+    recipe.ingredients.forEach(function (ingredient, index) {
+        calorieCount += ingredient['calories'] * recipe.quantities[index];
+    });
+
+    if (calorieCount !== 500) {
+        return 0;
+    }
+
     return scores.reduce(function (prev, current) {
         return prev * current;
     });
-};
+}
 
 fs.createReadStream('ingredients.txt', 'utf-8')
     .pipe(split())
