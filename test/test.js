@@ -17,3 +17,13 @@ describe('Day01', function () {
         });
     });
 });
+
+describe('Day17', function () {
+    describe('Part 1', function () {
+        it('should return 4372', function () {
+            this.timeout(6500);
+            var result = require('../Day17/app.js').solvePuzzle();
+            assert.equal(result, 4372);
+        });
+    });
+});
