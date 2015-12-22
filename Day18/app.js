@@ -3,7 +3,7 @@
  */
 var fs = require('fs');
 
-module.exports.solvePuzzle = function () {
+module.exports.solvePuzzle = function (isPartTwo) {
     var lightMatrix = fs.readFileSync(__dirname + '/input.txt', 'utf-8')
         .split('\n')
         .map(row => row.split(''));
@@ -15,8 +15,14 @@ module.exports.solvePuzzle = function () {
         return lightMatrix[i][j];
     }
 
+    function isCorner(i, j) {
+        return (i === 0 && (j === 0 || j === 99)) || (i === 99 && (j === 0 || j === 99));
+    }
+
     function updateValue(i, j, nextValue) {
         return function () {
+            if (isPartTwo && isCorner(i, j)) return;
+
             lightMatrix[i][j] = nextValue;
         }
     }

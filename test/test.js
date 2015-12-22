@@ -41,4 +41,10 @@ describe('Day18', function () {
             assert.equal(result, 768);
         });
     });
+    describe('Part 2', function () {
+        it('should return 781', function () {
+            var result = require('../Day18/app.js').solvePuzzle(true);
+            assert.equal(result, 781);
+        });
+    });
 });
