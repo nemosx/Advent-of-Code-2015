@@ -33,3 +33,12 @@ describe('Day17', function () {
         });
     });
 });
+
+describe('Day18', function () {
+    describe('Part 1', function () {
+        it('should return 768', function () {
+            var result = require('../Day18/app.js').solvePuzzle();
+            assert.equal(result, 768);
+        });
+    });
+});
