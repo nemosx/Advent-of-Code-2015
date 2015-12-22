@@ -26,4 +26,10 @@ describe('Day17', function () {
             assert.equal(result, 4372);
         });
     });
+    describe('Part 2', function () {
+        it('should return 4', function () {
+            var result = require('../Day17/app.js').solvePuzzle(true);
+            assert.equal(result, 4);
+        });
+    });
 });

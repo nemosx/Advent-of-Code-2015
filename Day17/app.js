@@ -23,9 +23,7 @@ function comb(k, list) {
         .concat(comb(k, everythingElse));
 }
 
-module.exports.solvePuzzle = function () {
-    var containers = fs.readFileSync(__dirname + '/input.txt', 'utf-8').split('\n').map(c => +c);
-
+function solvePartOne(containers) {
     var meetsCriteria = 0;
 
     for (var i = 1; i < containers.length; i++) {
@@ -35,4 +33,28 @@ module.exports.solvePuzzle = function () {
     }
 
     return meetsCriteria;
+}
+
+function solvePartTwo(containers) {
+    var meetsCriteria = 0;
+    var results;
+
+    for (var i = 1; i < containers.length; i++) {
+        results = comb(i, containers).map(function (combo) {
+            return combo.reduce((prev, curr) => prev + curr);
+        }).filter(total => total === 150);
+
+        if (results.length) {
+            console.log(i);
+            return results.length;
+        }
+    }
+
+    return meetsCriteria;
+}
+
+module.exports.solvePuzzle = function (isPartTwo) {
+    var containers = fs.readFileSync(__dirname + '/input.txt', 'utf-8').split('\n').map(c => +c);
+
+    return isPartTwo ? solvePartTwo(containers) : solvePartOne(containers);
 };
