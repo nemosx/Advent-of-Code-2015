@@ -3,14 +3,6 @@
  */
 var fs = require('fs');
 
-
-var s = 'abcddefed';
-
-var chars = s.split('');
-chars.splice(3, 2, 'xyz');
-console.log(chars.join(''));
-
-
 function findSubstrings(substring, string) {
     var indices = [];
     var index = string.indexOf(substring);
@@ -21,19 +13,11 @@ function findSubstrings(substring, string) {
     return indices.concat(findSubstrings(substring, string.slice(index + substring.length)).map(i => i + substring.length + index));
 }
 
-//parse input file
-// create map replacement to substitutes [s0, s1, s2, s3]
-// read input string
-
-// for each replacement
-// find substrings (there may be none)
-// for each index
-// split, splice @ index, substring.length, s0
-// put item in SET
 module.exports.solvePuzzle = function () {
     var startPoint;
     var replacements = {};
     var uniqueMolecules = new Set();
+
 
     function processLine(line) {
         var matches = line.match(/(\w+) => (\w+)/);
