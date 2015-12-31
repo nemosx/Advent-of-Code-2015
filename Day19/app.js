@@ -43,8 +43,6 @@ module.exports.solvePuzzle = function () {
         })
     });
 
-    console.log('set size:' + uniqueMolecules.size);
+    return uniqueMolecules.size;
 };
 
-
-module.exports.solvePuzzle();
