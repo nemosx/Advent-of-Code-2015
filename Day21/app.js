@@ -172,7 +172,10 @@ class Game {
             currentDefender = temp;
         }
 
-        return currentAttacker.isAlive() ? currentAttacker : currentDefender;
+        return {
+            winner : currentAttacker.isAlive() ? currentAttacker : currentDefender,
+            loser : !currentAttacker.isAlive() ? currentAttacker : currentDefender
+        }
     }
 
     calculateDamage(attacker, defender) {
@@ -238,7 +241,7 @@ function findLeastSpendForVictory() {
             return new Game(player, boss);
         })
         .map(game => {
-            return game.play();
+            return game.play().winner;
         })
         .filter(winner => {
             return winner.name === 'Player';
@@ -252,4 +255,33 @@ function findLeastSpendForVictory() {
     console.log(cheapestWinner.cost);
 }
 
+function findMostSpendForDefeat() {
+    let equipmentPermutations = generatePlayerEquipmentPermutations();
+
+    //Equipment => Games => Loser => Player Losers => Cost => Highest Cost
+    let highestCostLoser = equipmentPermutations
+        .map(playerEquipment => {
+            let boss = createBoss();
+            let player = createPlayer(playerEquipment);
+            return new Game(player, boss);
+        })
+        .map(game => {
+            return game.play().loser;
+        })
+        .filter(loser => {
+            return loser.name === 'Player';
+        })
+        .map (loser => {
+            return loser.cost;
+        })
+        .reduce((highestCost, cost) => {
+            return cost > highestCost ? cost : highestCost;
+        }, Number.MIN_VALUE);
+
+
+    console.log(highestCostLoser);
+}
+
 findLeastSpendForVictory();
+
+findMostSpendForDefeat();
