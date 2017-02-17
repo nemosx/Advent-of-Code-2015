@@ -90,9 +90,19 @@ class Effect {
     }
 
     static isInactive(effectName, activeEffects) {
-        return activeEffects.filter(effect => {
-                return effect.name === effectName;
-            }).length === 0;
+        let notActive = true;
+
+        activeEffects.forEach(effect => {
+            if (effect.name === effectName && effect.timer > 0) {
+                notActive = false;
+            }
+        });
+        return notActive;
+
+        //
+        // return activeEffects.filter(effect => {
+        //         return effect.name === effectName;
+        //     }).length === 0;
     }
 
     applyEffect(player, boss) {}

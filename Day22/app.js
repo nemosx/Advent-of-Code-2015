@@ -187,9 +187,6 @@ function expand(gameState) {
 
     if (currentAttacker.name === 'Boss') {
         let effectiveDamage = currentAttacker.attack - currentDefender.armor;
-        if (effectiveDamage <= 0) {
-            effectiveDamage = 1;
-        }
 
         currentDefender.applyDamage(effectiveDamage);
 
@@ -230,10 +227,9 @@ function expand(gameState) {
 
 function searchGameStates(gameState, round) {
 
-    // if (gameState.currentAttacker.name === 'Player' && round % 2 === 1) {
-    //     gameState.currentAttacker.applyDamage(1);
-    //     console.log('damaage applied on round %d', round);
-    // }
+    if (gameState.currentAttacker.name === 'Player') {
+        gameState.currentAttacker.applyDamage(1);
+    }
 
     if (gameState.isGameOver()) {
         completedGames.push(gameState);
