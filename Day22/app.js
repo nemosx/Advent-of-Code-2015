@@ -23,9 +23,6 @@ class Player {
 
     applyDamage(damage) {
         this.hp -= damage;
-        if (this.hp < 0) {
-            this.hp = 0;
-        }
     }
 
     equals(anotherPlayer) {
@@ -163,13 +160,13 @@ function expand(gameState) {
     let player = nextGameState.player;
     let boss = nextGameState.boss;
 
-
     //Remove effects that are no longer active
     nextGameState.activeEffects.forEach(effect => {
         if (!effect.isActive()) {
             effect.removeEffect(player, boss);
         }
     });
+
     //and filter them from the list
     nextGameState.activeEffects = nextGameState.activeEffects.filter(effect => {
         return effect.isActive();
@@ -179,8 +176,6 @@ function expand(gameState) {
     nextGameState.activeEffects.forEach(effect => {
         effect.administer(player, boss);
     });
-
-
 
     if (nextGameState.isGameOver()) {
         return [nextGameState];
@@ -235,9 +230,10 @@ function expand(gameState) {
 
 function searchGameStates(gameState, round) {
 
-    if (gameState.currentAttacker.name === 'Player') {
-        gameState.currentAttacker.applyDamage(1);
-    }
+    // if (gameState.currentAttacker.name === 'Player' && round % 2 === 1) {
+    //     gameState.currentAttacker.applyDamage(1);
+    //     console.log('damaage applied on round %d', round);
+    // }
 
     if (gameState.isGameOver()) {
         completedGames.push(gameState);
@@ -245,11 +241,11 @@ function searchGameStates(gameState, round) {
         return;
     }
 
-    // if (alreadyEvaluated(gameState)) {
-    //     return;
-    // }
-    //
-    // evaluatedGameStates.push(gameState);
+    if (alreadyEvaluated(gameState)) {
+        return;
+    }
+
+    evaluatedGameStates.push(gameState);
 
     let nextStates = expand(gameState);
 
@@ -259,7 +255,7 @@ function searchGameStates(gameState, round) {
 }
 
 
-searchGameStates(initialGameState, 0);
+searchGameStates(initialGameState, 1);
 
 const lowestManaSpend =
     completedGames
