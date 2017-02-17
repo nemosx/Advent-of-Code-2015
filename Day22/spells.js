@@ -104,6 +104,10 @@ class Effect {
         this.applyEffect(player, boss);
     }
 
+    equals(anotherEffect) {
+        return this.name === anotherEffect.name && this.timer === anotherEffect.timer;
+    }
+
     isActive() {
         return this.timer > 0;
     }
@@ -118,12 +122,23 @@ class ShieldEffect extends Effect {
     applyEffect(player, boss) {
         if (!this.alreadyApplied) {
             this.alreadyApplied = true;
-            console.log('ADDING SHIELD TO PLAYER');
+            player.armor = 7;
         }
     }
 
     removeEffect(player, boss) {
-        console.log("REMOVING SHIELD FROM PLAYER");
+        player.armor = 0;
+    }
+
+    equals(anotherEffect) {
+        return this.alreadyApplied === anotherEffect.alreadyApplied && super.equals(anotherEffect);
+    }
+
+    clone() {
+        let clone = new ShieldEffect();
+        clone.timer = this.timer;
+        clone.alreadyApplied = this.alreadyApplied;
+        return clone;
     }
 }
 
@@ -133,7 +148,13 @@ class PoisonEffect extends Effect {
     }
 
     applyEffect(player, boss) {
-        console.log('Poisoning the boss');
+        boss.applyDamage(3);
+    }
+
+    clone() {
+        let clone = new PoisonEffect();
+        clone.timer = this.timer;
+        return clone;
     }
 }
 
@@ -143,7 +164,14 @@ class RechargeEffect extends Effect {
     }
 
     applyEffect(player, boss) {
-        console.log('Adding mana to player');
+        player.mana += 101;
+    }
+
+
+    clone() {
+        let clone = new RechargeEffect();
+        clone.timer = this.timer;
+        return clone;
     }
 }
 
