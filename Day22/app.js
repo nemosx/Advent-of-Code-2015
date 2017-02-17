@@ -163,6 +163,7 @@ function expand(gameState) {
     let player = nextGameState.player;
     let boss = nextGameState.boss;
 
+
     //Remove effects that are no longer active
     nextGameState.activeEffects.forEach(effect => {
         if (!effect.isActive()) {
@@ -178,6 +179,8 @@ function expand(gameState) {
     nextGameState.activeEffects.forEach(effect => {
         effect.administer(player, boss);
     });
+
+
 
     if (nextGameState.isGameOver()) {
         return [nextGameState];
@@ -215,6 +218,7 @@ function expand(gameState) {
 
         castableSpells.forEach(spell => {
             let futureState = nextGameState.clone();
+
             let effect = spell.cast(futureState.currentAttacker, futureState.currentDefender);
             futureState.currentAttacker.mana -= spell.cost;
             futureState.cumulativeManaSpend += spell.cost;
@@ -230,17 +234,22 @@ function expand(gameState) {
 }
 
 function searchGameStates(gameState, round) {
+
+    if (gameState.currentAttacker.name === 'Player') {
+        gameState.currentAttacker.applyDamage(1);
+    }
+
     if (gameState.isGameOver()) {
         completedGames.push(gameState);
         evaluatedGameStates.push(gameState);
         return;
     }
 
-    if (alreadyEvaluated(gameState)) {
-        return;
-    }
-
-    evaluatedGameStates.push(gameState);
+    // if (alreadyEvaluated(gameState)) {
+    //     return;
+    // }
+    //
+    // evaluatedGameStates.push(gameState);
 
     let nextStates = expand(gameState);
 
