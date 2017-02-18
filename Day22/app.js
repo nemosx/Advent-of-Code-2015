@@ -147,12 +147,10 @@ let boss = new Player('Boss', 55, 0, 0, 8);
 let initialGameState = new GameState(player, boss);
 
 const completedGames = [];
-const evaluatedGameStates = [];
+const evaluatedGames = new Set();
 
 function alreadyEvaluated(gameState) {
-    return evaluatedGameStates.some(state => {
-        return state.equals(gameState);
-    });
+    return evaluatedGames.has(JSON.stringify(gameState));
 }
 
 function expand(gameState) {
@@ -224,16 +222,17 @@ function expand(gameState) {
         return futureStates;
     }
 }
+const isHardDifficulty = true;
 
 function searchGameStates(gameState, round) {
 
-    if (gameState.currentAttacker.name === 'Player') {
+    if (isHardDifficulty && gameState.currentAttacker.name === 'Player') {
         gameState.currentAttacker.applyDamage(1);
     }
 
     if (gameState.isGameOver()) {
         completedGames.push(gameState);
-        evaluatedGameStates.push(gameState);
+        evaluatedGames.add(JSON.stringify(gameState));
         return;
     }
 
@@ -241,7 +240,7 @@ function searchGameStates(gameState, round) {
         return;
     }
 
-    evaluatedGameStates.push(gameState);
+    evaluatedGames.add(JSON.stringify(gameState));
 
     let nextStates = expand(gameState);
 
@@ -250,6 +249,9 @@ function searchGameStates(gameState, round) {
     });
 }
 
+
+//console.log(JSON.stringify(initialGameState));
+//console.log(JSON.stringify(expand(initialGameState)));
 
 searchGameStates(initialGameState, 1);
 
