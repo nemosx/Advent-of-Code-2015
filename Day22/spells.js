@@ -98,20 +98,15 @@ class Effect {
             }
         });
         return notActive;
-
-        //
-        // return activeEffects.filter(effect => {
-        //         return effect.name === effectName;
-        //     }).length === 0;
     }
 
-    applyEffect(player, boss) {}
+    administer(player, boss) {}
 
     removeEffect(player, boss) {}
 
-    administer(player, boss) {
+    apply(player, boss) {
         this.timer--;
-        this.applyEffect(player, boss);
+        this.administer(player, boss);
     }
 
     equals(anotherEffect) {
@@ -129,7 +124,7 @@ class ShieldEffect extends Effect {
         this.alreadyApplied = false;
     }
 
-    applyEffect(player, boss) {
+    administer(player, boss) {
         if (!this.alreadyApplied) {
             this.alreadyApplied = true;
             player.armor = 7;
@@ -157,7 +152,7 @@ class PoisonEffect extends Effect {
         super('Poison', 6);
     }
 
-    applyEffect(player, boss) {
+    administer(player, boss) {
         boss.applyDamage(3);
     }
 
@@ -173,7 +168,7 @@ class RechargeEffect extends Effect {
         super('Recharge', 5);
     }
 
-    applyEffect(player, boss) {
+    administer(player, boss) {
         player.mana += 101;
     }
 
