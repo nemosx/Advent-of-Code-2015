@@ -5,7 +5,7 @@ const fs = require('fs');
 const instructions = fs.readFileSync('input.txt', 'utf-8').split('\n');
 
 const REGISTERS = {
-    a: 0,
+    a: 1,
     b: 0
 };
 
