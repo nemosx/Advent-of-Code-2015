@@ -21,5 +21,8 @@
   "homepage": "https://github.com/nemosx/adventofcode#readme",
   "devDependencies": {
     "mocha": "^2.3.4"
+  },
+  "dependencies": {
+    "combinations-generator": "^1.0.1"
   }
 }
