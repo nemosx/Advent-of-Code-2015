@@ -25,8 +25,6 @@ const equalPackageWeight = packages.reduce((total, gift) => {
         return total += gift;
     }, 0) / 4;
 
-let comboSize = 1;
-
 function checkSum(items, desiredWeight) {
     let total = 0;
     for (let i = 0; i < items.length; i++) {
@@ -38,8 +36,8 @@ function checkSum(items, desiredWeight) {
     return total === desiredWeight;
 }
 
-let sleighConfigurations = [];
 let firstCombos = [];
+let comboSize = 1;
 
 while (comboSize < 7) {
     let combinations = comb(packages, comboSize);
