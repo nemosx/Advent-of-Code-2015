@@ -5,7 +5,7 @@ const fs = require('fs');
 const comb = require("combinations-generator");
 
 //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
-Set.prototype.difference = function(setB) {
+Set.prototype.difference = function (setB) {
     var difference = new Set(this);
     for (var elem of setB) {
         difference.delete(elem);
@@ -22,8 +22,8 @@ const packages = fs.readFileSync('input.txt', 'utf-8')
 const PACKAGE_SET = new Set(packages);
 
 const equalPackageWeight = packages.reduce((total, gift) => {
-    return total += gift;
-}, 0) / 3;
+        return total += gift;
+    }, 0) / 4;
 
 let comboSize = 1;
 
@@ -66,17 +66,24 @@ for (let i = 0; i < firstCombos.length; i++) {
 
         for (let nextCombo of nextCombos) {
             if (checkSum(nextCombo, equalPackageWeight)) {
-                // let secondSet = new Set(nextCombo);
-                // let thirdSet = remainingAfterFirst.difference(secondSet);
-                //
-                // sleighConfigurations.push([firstSet, secondSet, thirdSet]);
-                //
-                // // /console.log(sleighConfigurations);
+                let secondSet = new Set(nextCombo);
+                let thirdSet = remainingAfterFirst.difference(secondSet);
 
-                let lowestQE = calculateQuantumEntanglement(firstCombos[i]);
+                for (let k = 1; k < thirdSet.size; k++) {
 
-                console.log('Lowest QE:' + lowestQE);
-                return;
+                    let thirdCombos = comb(Array.from(thirdSet), k);
+
+                    for (let thirdCombo of thirdCombos) {
+
+                        if (checkSum(thirdCombo, equalPackageWeight)) {
+                            let lowestQE = calculateQuantumEntanglement(firstCombos[i]);
+
+                            console.log('Lowest QE:' + lowestQE);
+                            return;
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -88,10 +95,3 @@ function calculateQuantumEntanglement(items) {
         return quantumEntanglement *= item;
     }, 1);
 }
-
-// const lowestQE = sleighConfigurations.reduce((lowestQuantumEntanglement, sleighConfig) => {
-//     let qe = calculateQuantumEntanglement(Array.from(sleighConfig[0]));
-//     return lowestQuantumEntanglement < qe ? lowestQuantumEntanglement : qe;
-// }, Number.MAX_VALUE);
-//
-// console.log(lowestQE);
