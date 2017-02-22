@@ -1,22 +1,24 @@
-"use strict";
 /**
  * Created by Michael Root on 12/3/2015.
  *
  */
-var fs = require('fs');
-
 module.exports.solvePuzzle = function (isPartTwo) {
-    var instructions = fs.readFileSync(__dirname + '/input.txt', 'utf-8');
+    let firstTimeToBasement = undefined;
+    const fs = require('fs');
+    const finalFloor = fs.readFileSync('input.txt', 'utf-8')
+        .split('')
+        .reduce((currentFloor, instruction, currentIndex) => {
+            if (currentFloor === -1 && !firstTimeToBasement) {
+                firstTimeToBasement = currentIndex;
+            }
 
-    var floorClimber = require('./floor-climber').init();
+            let nextFloor = instruction === '('? ++currentFloor : --currentFloor;
+            return nextFloor;
+        }, 0);
 
-    for (var i = 0, length = instructions.length; i < length; i++) {
-        floorClimber.processInstruction(instructions[i]);
-
-        if (isPartTwo && floorClimber.currentFloor() === -1) {
-            return i + 1;
-        }
-    }
-
-    return floorClimber.currentFloor();
+    return isPartTwo ? firstTimeToBasement : finalFloor;
 };
+
+const assert = require('assert');
+assert(module.exports.solvePuzzle() === 138);
+assert(module.exports.solvePuzzle(true) === 1771);
